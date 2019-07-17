@@ -22,7 +22,31 @@ namespace CDSPractical {
         /// <param name="source">An enumerable containing words</param>
         /// <returns></returns>
         public IEnumerable<int> ExtractNumbers(IEnumerable<string> source) {
-            throw new NotImplementedException();
+            List<int> returnitems = new List<int>();
+            List<string> listsource = (List<string>)source;
+            //loop each value in the list
+            for (int i=0; i<listsource.Count; i++)
+            {
+                bool validnumber = true;
+                String currentItem = listsource.ToArray().GetValue(i).ToString();
+
+                //check is number
+                char[] chars = currentItem.ToCharArray();                
+                byte[] values = System.Text.Encoding.ASCII.GetBytes(chars);
+                foreach (int item in values)
+                {
+                    if (item > 57 || item < 48)
+                    {
+                        validnumber = false;
+                    }
+                }
+                if (validnumber)
+                {
+                    returnitems.Add(int.Parse(currentItem));
+                }
+                listsource.GetEnumerator().MoveNext();
+            }
+            return (IEnumerable<int>) returnitems;
         }
 
         /// <summary>
@@ -66,8 +90,23 @@ namespace CDSPractical {
         /// <param name="first">First list of words</param>
         /// <param name="second">Second list of words</param>
         /// <returns></returns>
-        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {
-            throw new NotImplementedException();
+        public string LongestCommonWord(IEnumerable<string> first, IEnumerable<string> second) {            
+            String currentLongestString="", currentString="";
+            List<string> listfirst = (List<string>)first;
+            List<string> listsecond = (List<string>)second;
+
+            for (int i=0; i<listfirst.Count; i++)
+            {
+                currentString = listfirst.ToArray().GetValue(i).ToString();
+                if (listsecond.Contains(currentString))
+                {
+                    if (currentString.Length > currentLongestString.Length)
+                    {
+                        currentLongestString = currentString;
+                    }
+                }
+            }
+            return currentLongestString;
         }
 
         /// <summary>
@@ -83,7 +122,7 @@ namespace CDSPractical {
         /// <param name="km">distance in kilometers</param>
         /// <returns></returns>
         public double DistanceInMiles(double km) {
-            throw new NotImplementedException();
+            return km / 1.6;
         }
 
         /// <summary>
@@ -99,7 +138,7 @@ namespace CDSPractical {
         /// <param name="miles">distance in miles</param>
         /// <returns></returns>
         public double DistanceInKm(double miles) {
-            throw new NotImplementedException();
+            return miles * 1.6;
         }
 
         /// <summary>
@@ -121,7 +160,22 @@ namespace CDSPractical {
         /// <param name="word">The word to check</param>
         /// <returns></returns>
         public bool IsPalindrome(string word) {
-            throw new NotImplementedException();
+            char[] chararray = word.ToCharArray();
+            string reverseword = "";
+
+            for (int i=chararray.Length; i>=0; i--)
+            {
+                reverseword += chararray[i];
+            }
+
+            if (word.Equals(reverseword))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
@@ -142,7 +196,11 @@ namespace CDSPractical {
         /// <param name="source"></param>
         /// <returns></returns>
         public IEnumerable<object> Shuffle(IEnumerable<object> source) {
-            throw new NotImplementedException();
+            List<string> listsource = (List<string>)source;
+            listsource.Reverse();
+
+            return (IEnumerable<object>) listsource;
+            
         }
 
         /// <summary>
@@ -153,8 +211,33 @@ namespace CDSPractical {
         /// </summary>
         /// <param name="source"></param>
         /// <returns></returns>
-        public int[] Sort(int[] source) {
-            throw new NotImplementedException();
+        public int[] Sort(int[] source, int currentIndex=1, int movingIndex=1) {
+            int currentItem = source[currentIndex];
+            if (currentIndex==0)
+            {
+                if (movingIndex < source.Length)
+                {
+                    return Sort(source, movingIndex + 1, movingIndex + 1);
+                } else
+                {
+                    return source;
+                }
+            } else
+            {
+                int comparitor = source[currentIndex - 1];
+                if (comparitor > currentItem)
+                {
+                    source[currentIndex] = comparitor;
+                    source[currentIndex - 1] = currentItem;
+                    return Sort(source, currentIndex - 1, movingIndex);
+                }
+                else
+                {
+                    return Sort(source, currentIndex + 1, movingIndex + 1);
+                }
+            }
+
+            return source;
         }    
 
         /// <summary>
@@ -168,7 +251,25 @@ namespace CDSPractical {
         /// </summary>
         /// <returns></returns>
         public int FibonacciSum() {
-            throw new NotImplementedException();
+            List<int> fibonacci = new List<int>() { 1, 2 };
+            int[] fibarray;
+            int nextnum;
+            int sum = 2;
+            do
+            {
+                fibarray = fibonacci.ToArray();
+                nextnum = (int)fibarray.GetValue(fibarray.Length - 2) + (int)fibarray.GetValue(fibarray.Length-1);
+                if (nextnum < 4000000)
+                {
+                    fibonacci.Add(nextnum);
+                    if ((double)nextnum % 2 == 0)
+                    {
+                        sum += nextnum;
+                    }
+                }
+            } while (nextnum < 4000000);
+
+            return sum;
         }
 
         /// <summary>
@@ -187,7 +288,8 @@ namespace CDSPractical {
                     var complete = false;
                     while (!complete) {                        
                         var next = ret.Count + 1;
-                        Thread.Sleep(new Random().Next(1, 10));
+                        //Thread.Sleep(new Random().Next(1, 10));
+                        
                         if (next <= 100) {
                             ret.Add(next);
                         }

@@ -104,7 +104,7 @@ namespace CDSPracticalTests {
 
         [Fact]
         public void CanSort() {
-            throw new NotImplementedException();
+            Assert.Equal(new List<int> { 5, 7, 8, 9, 10 }, instance.Sort(new int[] { 7, 9, 10, 8, 5 }));
         }
 
         [Fact]
@@ -123,4 +123,5 @@ namespace CDSPracticalTests {
             }
         }
     }
+    
 }
